@@ -12,7 +12,6 @@
  *  4. When the link is clicked (see above) make a request for images for that breed (limit 5 per page)
  *  5. Display the images to the user with Next and Previous buttons that will load the next/previous page.
  * 
- *  MY API KEY - 582125ca-20b5-46cd-941d-f697028cbb06
  * 
  */
 
@@ -321,7 +320,7 @@ const Start = ( async () => {
      */
 
 
-    const myApiKey = `582125ca-20b5-46cd-941d-f697028cbb06`; // Normally this would be in a .env file
+    const myApiKey = process.env.API_KEY; // Normally this would be in a .env file
     
     let currentPage = 0;            // STATE - current page being rendered
     let currentBreed = undefined;   // STATE - current breed being rendered
