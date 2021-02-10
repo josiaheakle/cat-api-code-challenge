@@ -12,6 +12,7 @@
  *  4. When the link is clicked (see above) make a request for images for that breed (limit 5 per page)
  *  5. Display the images to the user with Next and Previous buttons that will load the next/previous page.
  * 
+ *  MY API KEY - 582125ca-20b5-46cd-941d-f697028cbb06
  * 
  */
 
@@ -110,7 +111,7 @@ class DOMHandler {
         this.backPageCallback = backPageCallback;
         this.nextPageCallback = nextPageCallback;
 
-        this.isListOpen = true;
+        this.isListOpen = false;
     }
 
 
@@ -124,9 +125,10 @@ class DOMHandler {
         const list = document.createElement('ul');
         const listContainer = document.createElement('div');
         listContainer.id = 'breed-list-container'
+        listContainer.classList.add('shrink')
         list.id = 'breed-list'
         listOpenButton.id = 'list-open-button';
-        listOpenButton.textContent = 'Close';
+        listOpenButton.textContent = 'Open';
         listOpenButton.onclick = () => {
             this.isListOpen = !this.isListOpen;
             listOpenButton.textContent = `${this.isListOpen?'Close':'Open'}`
@@ -214,15 +216,17 @@ class DOMHandler {
      * Creates button container for the next and previous page buttons
      */
     createPageButtonContainer() {
-        const container = document.createElement('div');
-        const pageNumContainer  = document.createElement('div');
-        const pageButtonContainer  = document.createElement('div');
-        container.id = 'page-container';
-        pageNumContainer.id = 'page-number-container';
-        pageButtonContainer.id = 'page-button-container';
-        container.appendChild(pageButtonContainer)
-        container.appendChild(pageNumContainer)
-        document.getElementById(this.imageGridID).appendChild(container)
+        if(!document.getElementById('page-container')) {
+            const container = document.createElement('div');
+            const pageNumContainer  = document.createElement('div');
+            const pageButtonContainer  = document.createElement('div');
+            container.id = 'page-container';
+            pageNumContainer.id = 'page-number-container';
+            pageButtonContainer.id = 'page-button-container';
+            container.appendChild(pageButtonContainer)
+            container.appendChild(pageNumContainer)
+            document.getElementById(this.anchorID).appendChild(container)
+        }
     }
 
     /**
@@ -266,6 +270,7 @@ class DOMHandler {
         if(!document.getElementById('page-number')) {
             const pageNumber = document.createElement('span');
             pageNumber.textContent = `Page ${pageNum}`;
+            pageNumber.id = 'page-number';
             document.getElementById('page-number-container').appendChild(pageNumber)
         } else {
             document.getElementById('page-number').textContent = `Page ${pageNum}`
@@ -277,22 +282,32 @@ class DOMHandler {
      * @param {Breed} breed
      */
     showBreedHeader(breed) {
-        if(!document.getElementById('breed-header')) {
-            const headerContainer = document.createElement('div');
-            const headerTitle = document.createElement('h1');
+        if(document.getElementById('header-small')) {
+            document.getElementById('attribution-container').remove();
+            document.getElementById('header-small').remove();
             const headerDescr = document.createElement('p');
-            headerContainer.id = 'breed-header';
-            headerTitle.textContent = breed.name;
-            headerTitle.id = 'breed-header-title';
             headerDescr.textContent = breed.description;
-            headerDescr.id = 'breed-header-description';
-            headerContainer.appendChild(headerTitle);
-            headerContainer.appendChild(headerDescr);
-            document.getElementById(this.imageGridID).appendChild(headerContainer);
+            headerDescr.id = 'header-description';
+            document.getElementById('header').appendChild(headerDescr);
+            document.getElementById('header-title').textContent = breed.name;
         } else {
-            document.getElementById('breed-header-title').textContent = breed.name;
-            document.getElementById('breed-header-description').textContent = breed.description;
+            document.getElementById('header-title').textContent = breed.name;
+            document.getElementById('header-description').textContent = breed.description;
         }
+    }
+
+    createIntroHeader() {
+        const headerContainer = document.createElement('div');
+        const headerTitle = document.createElement('h2');
+        const headerSmall = document.createElement('h3');
+        headerContainer.id = 'header';
+        headerTitle.textContent = 'JS Code Challenge';
+        headerTitle.id = 'header-title';
+        headerSmall.id = 'header-small';
+        headerSmall.textContent = 'Josiah Eakle | Feb 9, 2021'
+        headerContainer.appendChild(headerTitle);
+        headerContainer.appendChild(headerSmall);
+        document.getElementById(this.anchorID).appendChild(headerContainer);
     }
 
     /**
@@ -435,6 +450,7 @@ const Start = ( async () => {
     
     const breedArray = await getBreeds(); // Get breeds
     renderList(breedArray);               // Render list
+    domHandler.createIntroHeader('anchor'); // Creates the header for intro and images
     domHandler.createImageGrid('anchor'); // Create container for images
 
 })();

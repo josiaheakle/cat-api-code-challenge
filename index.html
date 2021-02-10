@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap" rel="stylesheet">
+    <link rel="icon" href="./favicon.ico">
+    <title>JS Code Challenge</title>
+</head>
+<style>
+
+    html {
+        font-size: 110%;
+    }
+
+    body {
+        --image-height: 180px;
+
+        --dark-text: #000000;
+        --dark-back: #14213d;
+        --yellow: #fca311;
+        --grey: #e5e5e5;
+        --light: #ffffff;
+
+        margin: 0;
+        overflow-x: hidden;
+        font-family: 'Hammersmith One', sans-serif;
+    }
+
+    p {margin-bottom: 1rem;}
+
+    h1, h2, h3, h4, h5 {
+        font-weight: 400;
+        margin-block-end: 0;
+        margin-block-start: 0;
+        /* line-height: 1.3; */
+    }
+
+    h1 {
+    margin-top: 0;
+    font-size: 3.052rem;
+    }
+
+    h2 {font-size: 2.441rem;}
+
+    h3 {font-size: 1.953rem;}
+
+    h4 {font-size: 1.563rem;}
+
+    h5 {font-size: 1.25rem;}
+
+    #anchor {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--dark-back);
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    .cat-image {
+        max-height: var(--image-height);
+        max-width: 100%;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .icon,
+    .cat-image {
+        transition: transform .3s ease-out;
+
+    }
+
+    .icon:hover,
+    .cat-image:hover  {
+        transform: scale(1.1);
+    }
+
+
+    .cat-image-container {
+        max-width: calc(100vw - 2rem);
+        width: 100%;
+        min-height: calc(100vh - 20rem);
+        align-content: center;
+        padding: .5rem;
+
+        display: grid;
+
+        /* overflow-x: auto; */
+        align-items: center;
+        justify-items: center;
+    }
+
+    @media only screen and (max-width: 750px) {
+        .cat-image-container {
+            grid-template-columns: 1fr;
+            grid-auto-rows: calc(var(--image-height) + 1rem);
+
+        }
+
+        #page-number-container {
+            margin-bottom: 2rem;
+        }
+
+        
+        #header { 
+            max-width: calc(90vw - 4rem);
+        }
+
+    } 
+    @media only screen and (min-width: 751px) {
+        .cat-image-container {
+            /* max-width: 900px; */
+            grid-template-columns: 1fr 1fr;
+            grid-auto-rows: calc(var(--image-height) + 1rem);
+
+        }
+
+        #header, 
+        #page-container,
+        .last {
+            grid-column-start: 1;
+            grid-column-end: 3;
+        }
+
+        #page-container {
+            grid-row-start: 5;
+            grid-row-end: 6;
+        }
+
+        #header, 
+        #page-container,
+        .cat-image-container {
+            max-width: 900px;
+        }
+
+        #header { 
+            max-width: 940px;
+        }
+    }
+
+    #breed-list {
+        background-color: var(--dark-text);
+        color: var(--light);
+
+        position: relative;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        z-index: 10;
+        margin: 0;
+        width: 15rem;
+
+        overflow-y: auto;
+
+    }
+
+    a {
+        color: var(--light);
+        transition: color .2s;
+    }
+
+    
+    a:hover {
+        color: var(--yellow);
+    }
+
+    #breed-list-container {
+        position: fixed;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+        transition: transform .5s ease-out;
+    }
+
+    .shrink {
+        position: relative;
+        transform: translateX(calc(-15rem - 40px));
+        /* right: 15rem; */
+    }
+
+    #list-open-button {
+        position: relative;
+        height: 3rem;
+        width: 5rem;
+        margin-top: calc(50vh - 2rem);
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+        outline: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: background-color .2s, color .2s;
+    }
+
+
+    #list-open-button:hover {
+        background-color: var(--dark-text);
+        color: var(--yellow);
+    }
+
+    #page-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        height: 4rem;
+        color: var(--light);
+    }
+
+    #page-button-container {
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row-reverse;
+        justify-content: space-evenly;
+    }
+
+    #page-number-container {
+        text-align: center;
+    }
+
+    #next-page-button {
+        align-self: flex-end;
+    }
+
+    #back-page-button {
+        align-self: flex-start;
+    }
+
+    a.hidden {
+        pointer-events: none;
+        color: grey;
+    }
+
+    #header {
+        margin-top: 1rem;
+        padding: 2rem;
+        background-color: var(--yellow);
+        border-radius: 20px;
+        min-height: 10rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        
+        justify-content: center;
+    }
+
+    #attribution-container {
+        position: fixed;
+        right: 2rem;
+        bottom: 1rem;
+    }
+
+    #attribution-container.hidden {
+        width: 0;
+        overflow: hidden;
+    }
+    
+
+
+</style>
+<body>
+    
+    <div id='anchor'></div>
+    <span id='attribution-container'>
+        <a href='https://josiaheakle.com' title='Josiah Eakle Portfolio'>
+            <img class='icon' src='./favicon.ico' alt='Created by Josiah Eakle'>
+        </a>
+    </span>
+
+    <script type='text/javascript' src='./je-code-challenge.js'></script>
+</body>
+</html>
