@@ -334,7 +334,8 @@ const Start = ( async () => {
      */
 
 
-    const myApiKey = process.env.API_KEY; // Normally this would be in a .env file
+    // const myApiKey = process.env.API_KEY;
+    const myApiKey = 582125ca-20b5-46cd-941d-f697028cbb06; // Normally this would be in a .env file
     
     let currentPage = 0;            // STATE - current page being rendered
     let currentBreed = undefined;   // STATE - current breed being rendered
